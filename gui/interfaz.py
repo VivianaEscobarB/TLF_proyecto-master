@@ -9,6 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from analizadores.identificador import IdentificadorAFD
 from lexer import AnalizadorLexico
 from tokens import Categoria
+from gui.mensajes_error import MensajesError
 
 class InterfazLexer:
     def __init__(self, root):
@@ -50,7 +51,7 @@ class InterfazLexer:
             Categoria.MODIFICADOR_ACCESO: "magenta",
             Categoria.ANGULAR_APERTURA: "dark cyan",
             Categoria.ANGULAR_CIERRE: "dark cyan",
-            # Categoria.ERROR se maneja en el panel de errores, no necesita color aquí
+            Categoria.ERROR: "red"  # Color para errores
         }
         
         # Configuración de la interfaz
@@ -58,6 +59,9 @@ class InterfazLexer:
         
         # Inicializar analizador léxico
         self.analizador = AnalizadorLexico()
+        
+        # Configurar eventos del editor
+        self.editor.bind('<KeyRelease>', self.resaltar_sintaxis)
         
     def configure_ui(self):
         """Configura todos los elementos de la interfaz gráfica"""
@@ -71,13 +75,17 @@ class InterfazLexer:
         self.editor = scrolledtext.ScrolledText(left_frame, wrap=tk.WORD, width=50, height=30)
         self.editor.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
+        # Configurar tags para resaltado de sintaxis
+        for categoria, color in self.colores_categoria.items():
+            self.editor.tag_configure(categoria, foreground=color)
+        
         # Panel derecho para resultados (tokens y errores)
-        right_frame = ttk.Frame(main_frame) # Quitar LabelFrame para mejor distribución interna
+        right_frame = ttk.Frame(main_frame)
         right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         # Botones de acción
         btn_frame = ttk.Frame(right_frame)
-        btn_frame.pack(fill=tk.X, pady=(0,5)) # pady inferior para separar de la tabla
+        btn_frame.pack(fill=tk.X, pady=(0,5))
         
         self.btn_analizar = ttk.Button(btn_frame, text="Analizar Código", command=self.analizar_codigo)
         self.btn_analizar.pack(side=tk.LEFT, padx=(0,5))
@@ -104,7 +112,6 @@ class InterfazLexer:
         
         # Configurar tags para colores
         for categoria, color in self.colores_categoria.items():
-            # Usamos el nombre simple de la categoría como tag para simplificar
             tag_name = categoria.split('.')[-1] if '.' in categoria else categoria
             self.tabla_tokens.tag_configure(tag_name, foreground=color)
         
@@ -116,11 +123,15 @@ class InterfazLexer:
 
         # Panel para Errores Léxicos
         errores_frame = ttk.LabelFrame(right_frame, text="Errores Léxicos")
-        # Ajustar altura relativa para el panel de errores, ej. 1/3 de la tabla de tokens
-        errores_frame.pack(fill=tk.BOTH, expand=True, pady=(5,0), ipady=5) 
+        errores_frame.pack(fill=tk.BOTH, expand=True, pady=(5,0), ipady=5)
         
         self.texto_errores = scrolledtext.ScrolledText(errores_frame, wrap=tk.WORD, width=40, height=5, state=tk.DISABLED)
         self.texto_errores.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Configurar tags para errores
+        self.texto_errores.tag_configure("error", foreground="red")
+        self.texto_errores.tag_configure("sugerencia", foreground="blue")
+        self.texto_errores.tag_configure("posicion", foreground="dark green")
              
     def analizar_codigo(self):
         """Analiza el código completo usando el analizador léxico"""
@@ -135,12 +146,9 @@ class InterfazLexer:
         
         # Mostrar tokens en la tabla
         for token in tokens:
-            categoria_completa = token.categoria # Guardamos la original por si acaso
+            categoria_completa = token.categoria
             categoria_simple = categoria_completa.split('.')[-1] if '.' in categoria_completa else categoria_completa
-            
-            # Determinar el tag para el color
-            # El tag debe ser el nombre simple de la categoría que usamos al configurar
-            tag_aplicar = categoria_simple 
+            tag_aplicar = categoria_simple
             
             self.tabla_tokens.insert("", "end", values=(
                 token.lexema, 
@@ -154,8 +162,22 @@ class InterfazLexer:
         self.texto_errores.delete("1.0", tk.END)
         if errores:
             for i, error in enumerate(errores, 1):
-                mensaje_error = f"{i}. Error: Carácter '{error.lexema}' no reconocido en Fila {error.fila}, Columna {error.columna}\n"
-                self.texto_errores.insert(tk.END, mensaje_error)
+                # Obtener mensaje y sugerencia para el error
+                mensaje, sugerencia = MensajesError.obtener_mensaje_error(error.lexema)
+                
+                # Formatear el mensaje completo
+                mensaje_completo = MensajesError.formatear_mensaje_error(
+                    i, error.lexema, error.fila, error.columna, mensaje, sugerencia
+                )
+                
+                # Insertar el mensaje con los tags apropiados
+                self.texto_errores.insert(tk.END, f"{i}. Error en ", "posicion")
+                self.texto_errores.insert(tk.END, f"Fila {error.fila}, Columna {error.columna}:\n", "posicion")
+                self.texto_errores.insert(tk.END, f"   Carácter: '{error.lexema}'\n", "error")
+                self.texto_errores.insert(tk.END, f"   Mensaje: {mensaje}\n", "error")
+                self.texto_errores.insert(tk.END, f"   Sugerencia: {sugerencia}\n", "sugerencia")
+                self.texto_errores.insert(tk.END, "\n")
+            
             messagebox.showwarning(
                 "Errores Léxicos Encontrados", 
                 f"Se encontraron {len(errores)} errores léxicos. Revise el panel de errores."
@@ -163,6 +185,27 @@ class InterfazLexer:
         else:
             self.texto_errores.insert(tk.END, "No se encontraron errores léxicos.\n")
         self.texto_errores.config(state=tk.DISABLED)
+    
+    def resaltar_sintaxis(self, event=None):
+        """Resalta la sintaxis del código en tiempo real"""
+        # Obtener el código actual
+        codigo = self.editor.get("1.0", tk.END)
+        
+        # Limpiar todos los tags
+        for tag in self.colores_categoria.keys():
+            self.editor.tag_remove(tag, "1.0", tk.END)
+        
+        # Analizar el código
+        tokens, _ = self.analizador.analizar(codigo)
+        
+        # Aplicar resaltado
+        for token in tokens:
+            # Calcular la posición del token
+            start_pos = f"{token.fila}.{token.columna-1}"
+            end_pos = f"{token.fila}.{token.columna-1+len(token.lexema)}"
+            
+            # Aplicar el tag correspondiente
+            self.editor.tag_add(token.categoria, start_pos, end_pos)
     
     def limpiar_tabla_tokens(self):
         """Limpia la tabla de tokens"""
@@ -186,6 +229,5 @@ class InterfazLexer:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    # Renombrar la clase de la interfaz si es necesario, ej. InterfazLexer
-    app = InterfazLexer(root) 
+    app = InterfazLexer(root)
     root.mainloop()
