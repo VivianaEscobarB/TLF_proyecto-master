@@ -15,7 +15,10 @@ class InterfazLexer:
     def __init__(self, root):
         self.root = root
         self.root.title("Analizador Léxico - TypeScript")
-        self.root.geometry("900x700")  # Ajustar tamaño para más espacio
+        self.root.geometry("1200x800")  # Ventana más grande
+        
+        # Configurar estilo
+        self.configurar_estilo()
         
         # Definir colores para categorías de tokens
         self.colores_categoria = {
@@ -51,7 +54,7 @@ class InterfazLexer:
             Categoria.MODIFICADOR_ACCESO: "magenta",
             Categoria.ANGULAR_APERTURA: "dark cyan",
             Categoria.ANGULAR_CIERRE: "dark cyan",
-            Categoria.ERROR: "red"  # Color para errores
+            Categoria.ERROR: "red"
         }
         
         # Configuración de la interfaz
@@ -63,48 +66,76 @@ class InterfazLexer:
         # Configurar eventos del editor
         self.editor.bind('<KeyRelease>', self.resaltar_sintaxis)
         
+    def configurar_estilo(self):
+        """Configura el estilo visual de la interfaz"""
+        style = ttk.Style()
+        
+        # Configurar colores y estilos
+        style.configure("TFrame", background="#f0f0f0")
+        style.configure("TLabelframe", background="#f0f0f0")
+        style.configure("TLabelframe.Label", font=("Arial", 10, "bold"))
+        style.configure("TButton", font=("Arial", 10))
+        style.configure("Treeview", font=("Consolas", 9))
+        style.configure("Treeview.Heading", font=("Arial", 10, "bold"))
+        
     def configure_ui(self):
         """Configura todos los elementos de la interfaz gráfica"""
-        main_frame = ttk.Frame(self.root)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Frame principal con padding
+        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Panel izquierdo para el editor
-        left_frame = ttk.LabelFrame(main_frame, text="Código TypeScript")
-        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        left_frame = ttk.LabelFrame(main_frame, text="Editor de Código TypeScript", padding="5")
+        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
         
-        self.editor = scrolledtext.ScrolledText(left_frame, wrap=tk.WORD, width=50, height=30)
-        self.editor.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Barra de herramientas del editor
+        toolbar = ttk.Frame(left_frame)
+        toolbar.pack(fill=tk.X, pady=(0, 5))
+        
+        self.btn_analizar = ttk.Button(toolbar, text="Analizar Código", command=self.analizar_codigo)
+        self.btn_analizar.pack(side=tk.LEFT, padx=(0, 5))
+        
+        self.btn_limpiar = ttk.Button(toolbar, text="Limpiar", command=self.limpiar)
+        self.btn_limpiar.pack(side=tk.LEFT)
+        
+        # Editor con fuente monoespaciada
+        self.editor = scrolledtext.ScrolledText(
+            left_frame,
+            wrap=tk.WORD,
+            width=50,
+            height=30,
+            font=("Consolas", 11)
+        )
+        self.editor.pack(fill=tk.BOTH, expand=True)
         
         # Configurar tags para resaltado de sintaxis
         for categoria, color in self.colores_categoria.items():
             self.editor.tag_configure(categoria, foreground=color)
         
-        # Panel derecho para resultados (tokens y errores)
+        # Panel derecho para resultados
         right_frame = ttk.Frame(main_frame)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        # Botones de acción
-        btn_frame = ttk.Frame(right_frame)
-        btn_frame.pack(fill=tk.X, pady=(0,5))
-        
-        self.btn_analizar = ttk.Button(btn_frame, text="Analizar Código", command=self.analizar_codigo)
-        self.btn_analizar.pack(side=tk.LEFT, padx=(0,5))
-        
-        self.btn_limpiar = ttk.Button(btn_frame, text="Limpiar", command=self.limpiar)
-        self.btn_limpiar.pack(side=tk.LEFT)
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
         
         # Panel para la tabla de Tokens
-        tokens_frame = ttk.LabelFrame(right_frame, text="Tokens Identificados")
-        tokens_frame.pack(fill=tk.BOTH, expand=True, pady=(5,5))
+        tokens_frame = ttk.LabelFrame(right_frame, text="Tokens Identificados", padding="5")
+        tokens_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 5))
 
+        # Configurar tabla de tokens
         columns = ("lexema", "categoria", "fila", "columna")
-        self.tabla_tokens = ttk.Treeview(tokens_frame, columns=columns, show="headings")
+        self.tabla_tokens = ttk.Treeview(
+            tokens_frame,
+            columns=columns,
+            show="headings",
+            height=10
+        )
         
+        # Configurar encabezados
         self.tabla_tokens.heading("lexema", text="Lexema")
         self.tabla_tokens.heading("categoria", text="Categoría")
         self.tabla_tokens.heading("fila", text="Fila")
         self.tabla_tokens.heading("columna", text="Columna")
         
+        # Configurar columnas
         self.tabla_tokens.column("lexema", width=150, anchor=tk.W)
         self.tabla_tokens.column("categoria", width=150, anchor=tk.W)
         self.tabla_tokens.column("fila", width=50, anchor=tk.CENTER)
@@ -115,6 +146,7 @@ class InterfazLexer:
             tag_name = categoria.split('.')[-1] if '.' in categoria else categoria
             self.tabla_tokens.tag_configure(tag_name, foreground=color)
         
+        # Scrollbar para la tabla
         scrollbar_tokens = ttk.Scrollbar(tokens_frame, orient=tk.VERTICAL, command=self.tabla_tokens.yview)
         self.tabla_tokens.configure(yscroll=scrollbar_tokens.set)
         
@@ -122,16 +154,26 @@ class InterfazLexer:
         scrollbar_tokens.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Panel para Errores Léxicos
-        errores_frame = ttk.LabelFrame(right_frame, text="Errores Léxicos")
-        errores_frame.pack(fill=tk.BOTH, expand=True, pady=(5,0), ipady=5)
+        errores_frame = ttk.LabelFrame(right_frame, text="Errores Léxicos", padding="5")
+        errores_frame.pack(fill=tk.BOTH, expand=True)
         
-        self.texto_errores = scrolledtext.ScrolledText(errores_frame, wrap=tk.WORD, width=40, height=5, state=tk.DISABLED)
-        self.texto_errores.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Área de texto para errores con fuente monoespaciada
+        self.texto_errores = scrolledtext.ScrolledText(
+            errores_frame,
+            wrap=tk.WORD,
+            width=40,
+            height=10,
+            font=("Consolas", 10),
+            state=tk.DISABLED
+        )
+        self.texto_errores.pack(fill=tk.BOTH, expand=True)
         
         # Configurar tags para errores
         self.texto_errores.tag_configure("error", foreground="red")
         self.texto_errores.tag_configure("sugerencia", foreground="blue")
         self.texto_errores.tag_configure("posicion", foreground="dark green")
+        self.texto_errores.tag_configure("ejemplo", foreground="purple")
+        self.texto_errores.tag_configure("explicacion", foreground="dark gray")
              
     def analizar_codigo(self):
         """Analiza el código completo usando el analizador léxico"""
@@ -163,11 +205,12 @@ class InterfazLexer:
         if errores:
             for i, error in enumerate(errores, 1):
                 # Obtener mensaje y sugerencia para el error
-                mensaje, sugerencia = MensajesError.obtener_mensaje_error(error.lexema)
+                mensaje, sugerencia, ejemplo, explicacion = MensajesError.obtener_mensaje_error(error.lexema)
                 
                 # Formatear el mensaje completo
                 mensaje_completo = MensajesError.formatear_mensaje_error(
-                    i, error.lexema, error.fila, error.columna, mensaje, sugerencia
+                    i, error.lexema, error.fila, error.columna,
+                    mensaje, sugerencia, ejemplo, explicacion
                 )
                 
                 # Insertar el mensaje con los tags apropiados
@@ -176,6 +219,9 @@ class InterfazLexer:
                 self.texto_errores.insert(tk.END, f"   Carácter: '{error.lexema}'\n", "error")
                 self.texto_errores.insert(tk.END, f"   Mensaje: {mensaje}\n", "error")
                 self.texto_errores.insert(tk.END, f"   Sugerencia: {sugerencia}\n", "sugerencia")
+                self.texto_errores.insert(tk.END, f"   Ejemplo:\n", "ejemplo")
+                self.texto_errores.insert(tk.END, f"     {ejemplo}\n", "ejemplo")
+                self.texto_errores.insert(tk.END, f"   Explicación: {explicacion}\n", "explicacion")
                 self.texto_errores.insert(tk.END, "\n")
             
             messagebox.showwarning(
