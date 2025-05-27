@@ -44,10 +44,6 @@ Este proyecto implementa un analizador léxico para TypeScript utilizando Autóm
 - [Documentación de Autómatas](automatas/README.md): Descripción formal de todos los autómatas finitos deterministas implementados, incluyendo expresiones regulares y diagramas de estados.
 - [Requisitos Cumplidos](requisitos_cumplidos.md): Detalle de cómo el proyecto cumple con todos los requisitos especificados.
 
-## Capturas de pantalla
-
-Para obtener capturas de pantalla de la interfaz gráfica, ejecute la aplicación con el comando:
-
 ```bash
 python3 main.py
 ```
