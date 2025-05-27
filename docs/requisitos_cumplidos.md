@@ -10,7 +10,7 @@ Este documento detalla cómo el proyecto cumple con cada uno de los requisitos e
 
 ✅ **Implementar el software para el analizador léxico con interfaz gráfica**
    - Se ha desarrollado una interfaz gráfica utilizando Tkinter
-   - La implementación está en Python, uno de los lenguajes permitidos
+   - La implementación está en Python
 
 ## 2. Tokens del lenguaje de programación
 
