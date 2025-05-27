@@ -10,21 +10,11 @@ Este proyecto implementa un analizador léxico para TypeScript utilizando Autóm
    ```
    Esto abrirá la interfaz gráfica.
 
-2. **Carga de Archivos**: 
-   - Utiliza el botón "Cargar Archivo" para seleccionar un archivo TypeScript.
-   - El código se mostrará en el editor de texto.
-
-3. **Análisis Léxico**: 
+2. **Análisis Léxico**: 
    - Haz clic en "Analizar" para procesar el código.
    - Los tokens identificados se mostrarán en la tabla, con colores según su categoría.
    - Los errores léxicos (si los hay) se mostrarán en el panel de errores.
-
-4. **Exportación**: 
-   - Utiliza el botón "Exportar" para guardar los resultados del análisis.
-
-## Screenshots
-[Incluir capturas de pantalla de la interfaz gráfica aquí]
-
+     
 ## Descripción Funcional
 - **Análisis Léxico**: Identifica y clasifica tokens como palabras reservadas, identificadores, números, cadenas, comentarios, operadores y símbolos.
 - **Interfaz Gráfica**: Proporciona una interfaz intuitiva para cargar archivos, visualizar tokens y errores, y exportar resultados.
