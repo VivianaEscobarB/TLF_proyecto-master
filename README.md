@@ -44,11 +44,9 @@ python3 tests/test_typescript.py
 ```
 
 ## Autores
-- [Tu Nombre]
-- [Otro Autor]
-
-## Fecha
-[Fecha de Entrega]
+- Anggie Viviana Escobar Bermudez
+- Jhoan Sebastian Urrea Sanchez
+- Tatiana Lisbeth Zamora Andrade
 
 ## Características Principales
 
@@ -75,7 +73,7 @@ TLF_proyecto/
 │   ├── identificador.py        # AFD para Identificadores (con truncamiento a 10 chars)
 │   ├── numero_natural.py       # AFD para Números Naturales
 │   ├── numero_real.py          # AFD para Números Reales (incluye notación científica básica)
-│   ├── palabra_reservada.py    # AFD para Palabras Reservadas de JavaScript
+│   ├── palabra_reservada.py    # AFD para Palabras Reservadas de TypeScript
 │   ├── cadena.py               # AFD para Cadenas de texto ( "", \'\', `` ) con secuencias de escape
 │   ├── comentario_linea.py     # AFD para Comentarios de Línea (//...)
 │   ├── comentario_bloque.py    # AFD para Comentarios de Bloque (/*...*/)
