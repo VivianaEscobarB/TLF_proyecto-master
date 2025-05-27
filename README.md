@@ -52,7 +52,7 @@ python3 tests/test_typescript.py
 
 -   **Análisis Léxico Detallado**: Identifica y clasifica tokens como palabras reservadas, identificadores, números (naturales y reales), cadenas (con comillas simples, dobles y acentos graves), comentarios (de línea y bloque), operadores y símbolos.
 -   **Interfaz Gráfica Interactiva**:
-    -   Editor de texto para ingresar código JavaScript.
+    -   Editor de texto para ingresar código TypeScript.
     -   Visualización en tiempo real de tokens identificados en una tabla (lexema, categoría, fila, columna).
     -   Coloreado de tokens en la tabla según su categoría para mejor legibilidad.
     -   Panel dedicado para mostrar errores léxicos encontrados.
