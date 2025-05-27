@@ -35,11 +35,9 @@ Este proyecto implementa un analizador léxico para TypeScript utilizando Autóm
 - Tkinter (generalmente incluido en las instalaciones estándar de Python)
 
 ## Autores
-- [Tu Nombre]
-- [Otro Autor]
-
-## Fecha
-[Fecha de Entrega]
+- Anggie Viviana Escobar Bermudez
+- Jhoan Sebastian Urrea Sanchez
+- Tatiana Lisbeth Zamora Andrade
 
 ## Contenido
 
@@ -56,7 +54,7 @@ python3 main.py
 
 Y capture la ventana que aparece. La interfaz del analizador léxico se ve así:
 
-![Interfaz del Analizador Léxico de JavaScript](automatas/image.png)
+![Interfaz del Analizador Léxico de Typecript](automatas/image.png)
 
 ## Tokens reconocidos
 
@@ -75,6 +73,6 @@ El analizador léxico reconoce los siguientes tipos de tokens:
 
 El analizador detecta los siguientes tipos de errores léxicos:
 
-1. Caracteres no reconocidos: símbolos que no pertenecen al lenguaje JavaScript
+1. Caracteres no reconocidos: símbolos que no pertenecen al lenguaje TypeScript
 2. Cadenas de texto sin cerrar: cadenas que comienzan con comillas pero no terminan
 3. Comentarios de bloque sin cerrar: comentarios que comienzan con /* pero no terminan con */ 
