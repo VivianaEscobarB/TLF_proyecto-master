@@ -1,6 +1,6 @@
 # Documentación de Autómatas Finitos Deterministas (AFD)
 
-Este directorio contiene la documentación formal de cada uno de los autómatas finitos deterministas implementados para el analizador léxico de JavaScript.
+Este directorio contiene la documentación formal de cada uno de los autómatas finitos deterministas implementados para el analizador léxico de TypeScript.
 
 ## Índice de Autómatas
 
@@ -20,7 +20,6 @@ Para cada autómata, se proporciona:
 - **Expresión Regular**: La expresión formal que describe el patrón del token
 - **Descripción del Autómata**: Explicación de los estados y transiciones
 - **Diagrama**: Representación gráfica del autómata
-- **Implementación**: Detalles sobre cómo se ha codificado el autómata
 
 ## Métodos comunes
 
