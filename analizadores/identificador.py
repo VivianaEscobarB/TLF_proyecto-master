@@ -1,8 +1,8 @@
 class IdentificadorAFD:
     """
-    Autómata Finito Determinista para reconocer identificadores en JavaScript.
+    Autómata Finito Determinista para reconocer identificadores en TypeScript.
     
-    Los identificadores en JavaScript deben:
+    Los identificadores en TypeScript deben:
     - Comenzar con una letra, guion bajo (_) o signo de dólar ($)
     - Luego pueden contener letras, números, guiones bajos o signos de dólar
     - Se limitan a un máximo de 10 caracteres
