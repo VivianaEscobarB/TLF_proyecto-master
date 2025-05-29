@@ -22,7 +22,7 @@ class TestSimboloAFD:
             assert afd.obtener_categoria(lexema) == 'OPERADOR_ARITMETICO'
 
     def test_operador_comparacion(self, afd):
-        simbolos = ['==', '!=', '>', '<', '>=', '<=']
+        simbolos = ['==', '!=','===', '!==', '>', '<', '>=', '<=']
         for simbolo in simbolos:
             valido, lexema, consumidos = afd.analizar(simbolo, 0)
             assert valido is True
@@ -31,7 +31,7 @@ class TestSimboloAFD:
             assert afd.obtener_categoria(lexema) == 'OPERADOR_COMPARACION'
 
     def test_operador_logico(self, afd):
-        simbolos = ['&&', '||', '!']
+        simbolos = ['&&', '||', '!', '|']
         for simbolo in simbolos:
             valido, lexema, consumidos = afd.analizar(simbolo, 0)
             assert valido is True
@@ -40,7 +40,7 @@ class TestSimboloAFD:
             assert afd.obtener_categoria(lexema) == 'OPERADOR_LOGICO'
 
     def test_operador_asignacion(self, afd):
-        simbolos = ['=', '+=', '-=', '*=', '/=', '%=']
+        simbolos = ['=', '+=', '-=', '*=', '**=','/=', '%=']
         for simbolo in simbolos:
             valido, lexema, consumidos = afd.analizar(simbolo, 0)
             assert valido is True

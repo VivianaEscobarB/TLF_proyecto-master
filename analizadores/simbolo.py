@@ -12,6 +12,8 @@ class SimboloAFD:
             # Operadores de comparación
             '==': 'OPERADOR_COMPARACION',
             '!=': 'OPERADOR_COMPARACION',
+            '===': 'OPERADOR_COMPARACION',
+            '!==': 'OPERADOR_COMPARACION',
             '>': 'OPERADOR_COMPARACION',
             '<': 'OPERADOR_COMPARACION',
             '>=': 'OPERADOR_COMPARACION',
@@ -20,6 +22,7 @@ class SimboloAFD:
             # Operadores lógicos
             '&&': 'OPERADOR_LOGICO',
             '||': 'OPERADOR_LOGICO',
+            '|': 'OPERADOR_LOGICO',
             '!': 'OPERADOR_LOGICO',
             
             # Operadores de asignación
@@ -27,6 +30,7 @@ class SimboloAFD:
             '+=': 'OPERADOR_ASIGNACION',
             '-=': 'OPERADOR_ASIGNACION',
             '*=': 'OPERADOR_ASIGNACION',
+            '**=': 'OPERADOR_ASIGNACION',
             '/=': 'OPERADOR_ASIGNACION',
             '%=': 'OPERADOR_ASIGNACION',
             
@@ -84,7 +88,13 @@ class SimboloAFD:
         """
         if pos_inicial >= len(texto):
             return False, '', 0
-            
+
+        # Intentar símbolos de 2 caracteres primero
+        if pos_inicial + 2 < len(texto):
+            simbolo_2char = texto[pos_inicial:pos_inicial+3]
+            if simbolo_2char in self.simbolos:
+                return True, simbolo_2char, 3
+              
         # Intentar símbolos de 2 caracteres primero
         if pos_inicial + 1 < len(texto):
             simbolo_2char = texto[pos_inicial:pos_inicial+2]
