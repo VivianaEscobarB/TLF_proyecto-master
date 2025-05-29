@@ -1,6 +1,6 @@
 class NumeroNaturalAFD:
     """
-    Autómata Finito Determinista para reconocer números naturales en JavaScript.
+    Autómata Finito Determinista para reconocer números naturales en TypeScript.
     
     Los números naturales pueden ser:
     - El dígito 0 por sí solo
