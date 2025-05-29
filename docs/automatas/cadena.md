@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Cadenas de Caracteres
 
 ## Expresión Regular
-La expresión regular que describe las cadenas de caracteres en JavaScript (con comillas dobles, simples o acentos graves) es:
+La expresión regular que describe las cadenas de caracteres en TypeScript (con comillas dobles, simples o acentos graves) es:
 
 ```
 ("([^"\\]|\\.)*"|'([^'\\]|\\.)*'|`([^`\\]|\\.)*`)
