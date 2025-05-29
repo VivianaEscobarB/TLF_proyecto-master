@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Analizador léxico principal para JavaScript.
+Analizador léxico principal para TypeScript.
 Orquesta todos los autómatas para analizar el código fuente.
 """
 
