@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Identificadores
 
 ## Expresión Regular
-La expresión regular que describe los identificadores en JavaScript (limitados a 10 caracteres) es:
+La expresión regular que describe los identificadores en typeScript (limitados a 10 caracteres) es:
 
 ```
 [a-zA-Z_$][a-zA-Z0-9_$]{0,9}
