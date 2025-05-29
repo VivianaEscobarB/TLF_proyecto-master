@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Comentarios de Bloque
 
 ## Expresión Regular
-La expresión regular que describe los comentarios de bloque en JavaScript es:
+La expresión regular que describe los comentarios de bloque en TypeScript es:
 
 ```
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/
