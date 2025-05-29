@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Comentarios de Línea
 
 ## Expresión Regular
-La expresión regular que describe los comentarios de línea en JavaScript es:
+La expresión regular que describe los comentarios de línea en TypeScript es:
 
 ```
 \/\/[^\n]*
