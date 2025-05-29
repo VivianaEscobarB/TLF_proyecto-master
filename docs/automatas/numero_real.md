@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Números Reales
 
 ## Expresión Regular
-La expresión regular que describe los números reales en JavaScript es:
+La expresión regular que describe los números reales en TypeScript es:
 
 ```
 ([0-9]+\.?[0-9]*|[0-9]*\.[0-9]+)([eE][+-]?[0-9]+)?
