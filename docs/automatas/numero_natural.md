@@ -1,7 +1,7 @@
 # Autómata Finito Determinista para Números Naturales
 
 ## Expresión Regular
-La expresión regular que describe los números naturales en JavaScript es:
+La expresión regular que describe los números naturales en TypeScript es:
 
 ```
 [0-9]+
