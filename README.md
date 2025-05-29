@@ -128,7 +128,7 @@ O si estás en la raíz del proyecto y `main.py` es ejecutable:
 ./main.py
 ```
 
-## Analizadores Implementados
+## Analizadores implementados
 
 Todos los analizadores listados en la estructura del proyecto han sido implementados y probados:
 
